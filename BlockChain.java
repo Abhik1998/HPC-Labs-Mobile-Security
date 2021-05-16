@@ -63,10 +63,22 @@ public class BlockChain {
         blockChainList =  new ArrayList<>();
         cache = new HashMap<>();
         size = 0;
+        long start = System.currentTimeMillis();
+
         extract("test/apktest1-analysis.json");
+
+        long time = System.currentTimeMillis() - start;
         extract("test/Lucky_Patcher_v935_apkmodyio-analysis.json");
-        //testUpdate();
+
+        
+        //System.out.println(time);
+        System.out.println("***********************Test1******************************");
+        System.out.println();
+        testUpdate();
+        System.out.println();
+        System.out.println("***********************Test2******************************");
         testAdd();
+        System.out.println();
         //System.out.println(blockChainList);
         // extract("test/Lucky_Patcher_v935_apkmodyio-analysis.json");
         // extract("test/Meme_Generator_PRO_v45986_apkmodyio-analysis.json");
@@ -102,6 +114,7 @@ public class BlockChain {
                         name = name.substring(0, name.length()-1);
                 }
             }
+            long start = System.currentTimeMillis();
             String data = sc.nextLine().trim();
             while(data.indexOf("Permissions")<0){
                 data = sc.nextLine().trim();
@@ -116,6 +129,8 @@ public class BlockChain {
                 if(data.indexOf(",")>=0)
                     data = data.substring(0, data.length()-1);
             }
+            long time = System.currentTimeMillis() - start;
+            System.out.println(time);
             data = sc.nextLine().trim();
             if(data.indexOf(",")>=0)
                     data = data.substring(0, data.length()-1);
@@ -233,22 +248,21 @@ public class BlockChain {
     public static void testUpdate(){
         System.out.println(blockChainList);
         try{
-            blockChainList.get(0).data.permission.add("Allo Leelo Meri Jaan");
+            blockChainList.get(0).data.permission.add("Get this done fast");
         }
         catch(UnsupportedOperationException e){
             System.out.println("Hey!! this operation is not permitted");
         }
         System.out.println(blockChainList.get(0).data.permission);
     }
-    public static void testAdd()throws NoSuchAlgorithmException{
+    public static void testAdd(){
         System.out.println(cache);
-        // try{
-            add("apktest1-analysis", new Static());
+        try{
             add("apktest1.apk", new Static());
-       // }
-        //catch(NoSuchAlgorithmException e){
+       }
+        catch(NoSuchAlgorithmException e){
 
-        //}
+        }
         System.out.println(cache);
         
     }
