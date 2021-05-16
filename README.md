@@ -25,3 +25,19 @@ where, N = number of apk files to be analyzed,
 The number of permissions in an average comes out to be 10 for apk files and considering the bundle recompilation time to be constant,  
 we arrive at a theoretical time complexity to be O(N).
 ```
+### Query Time Complexity:
+```
+Suppose we make a query using the app name, then:  
+Fetching app block address: O(1)-avg case | O(N)-worst case (hash-collisions)  
+Querying the permissions:   O(logm)-avg case | worst case  
+So, total complexity: O(logm) - avg case | O(N+logm)-worst case  
+
+Other method which can be implemented to reduce the worst case time complexity:  
+Implement a AVL Tree based Map rather than HashMap,  
+Fetching app block address: O(logN)-avg case | worst case  
+Querying the permissions:   O(logm)-avg case | worst case  
+So, total complexity: O(logm+logN) - avg case | worst case (O(logmN) = O(logm + logN))  
+
+where, N = number of apk files to be analyzed,  
+       m = number of permissions given to an apk file.  
+```
