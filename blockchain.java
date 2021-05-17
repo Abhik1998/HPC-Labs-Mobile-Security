@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.security.NoSuchAlgorithmException;
+import java.lang.instrument.Instrumentation;
+
 
 
 class blockchain{
@@ -53,7 +55,6 @@ class blockchain{
         long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
 
-
         File[] files = new File("Dataset").listFiles();
         //If this pathname does not denote a directory, then listFiles() returns null. 
         for (File file : files) {
@@ -63,11 +64,14 @@ class blockchain{
             }
         }
         int id=0;
+        System.out.println("Id"+"                     "+"Memory"+"                     "+"Permission Size");
         for(String name: results)
         {
             ProcessBuilder fb=new ProcessBuilder();
+            System.gc();
+            long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
             String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset/"+name+"> temp/"+id+".txt";
-           
             fb.command("bash", "-c", tool);
             Process process = fb.start();
             int exitVal = process.waitFor();
@@ -75,7 +79,6 @@ class blockchain{
                 File file=new File("temp/"+id+".txt");
                 id++;
                 Scanner sc=new Scanner(file);
-                
                 SortedSet<String> permissions=new TreeSet<>();
                 if(sc.hasNextLine()){
                     String data = sc.nextLine().trim();
@@ -111,13 +114,16 @@ class blockchain{
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
                 add(name, appdata);
-                sc.close();
-               //System.out.println(id+" "+permissions);
+               // sc.close();
+                //System.out.println(id+" "+permissions);
+                System.gc();
+                long fin=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
+                System.out.println(id+"                     "+(fin-init)+"                     "+permissions.size());
             }
 
             long time = System.currentTimeMillis() - start;
-            if(id%10==0)
-                System.out.println(id+" "+time);
+            
         }
         long total= System.currentTimeMillis() - start;
         System.out.println("Total time taken: "+total);
@@ -129,17 +135,19 @@ class blockchain{
             return;
         }
         String previousblockhash = size>=1?blockChainList.get(size-1).getHash(): "#";
-        final Block node = new Block(data, previousblockhash);
+        Block node = new Block(data, previousblockhash);
         size++;
-        if(validate(blockChainList))
-        {
-            blockChainList.add(node);
-            cache.put(app, node);
-        }
-        else
-        {
-            System.out.println("Not valid operation");
-        }
+        blockChainList.add(node);
+        cache.put(app, node);
+        // if(validate(blockChainList))
+        // {
+        //     blockChainList.add(node);
+        //     cache.put(app, node);
+        // }
+        // else
+        // {
+        //     System.out.println("Not valid operation");
+        // }
     }
     private static boolean validate(ArrayList<Block> blockChain) {
         boolean result = true;
