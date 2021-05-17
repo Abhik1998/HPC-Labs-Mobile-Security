@@ -41,6 +41,6 @@ So, total complexity: O(logm+logN) - avg case | worst case (O(logmN) = O(logm + 
 where, N = number of apk files to be analyzed,  
        m = number of permissions given to an apk file. 
 
-** JDK8+ has imporoved it, whenever there are 8+ elements in a bucket, rather than using a linkedList,   
+** JDK8+ has improved it, whenever there are 8+ elements in a bucket, rather than using a linkedList,   
    a tree is used reducing the worst case time complexity to O(logN)
 ```
