@@ -28,7 +28,7 @@ we arrive at a theoretical time complexity to be O(N).
 ### Query Time Complexity:
 ```
 Suppose we make a query using the app name, then:  
-Fetching app block address: O(1)-avg case | O(N)-worst case (hash-collisions)  
+Fetching app block address: O(1)-avg case | O(N)-worst case ** 
 Querying the permissions:   O(logm)-avg case | worst case  
 So, total complexity: O(logm) - avg case | O(N+logm)-worst case  
 
@@ -39,5 +39,8 @@ Querying the permissions:   O(logm)-avg case | worst case
 So, total complexity: O(logm+logN) - avg case | worst case (O(logmN) = O(logm + logN))  
 
 where, N = number of apk files to be analyzed,  
-       m = number of permissions given to an apk file.  
+       m = number of permissions given to an apk file. 
+
+** JDK8+ has improved it, whenever there are 8+ elements in a bucket, rather than using a linkedList,   
+   a tree is used reducing the worst case time complexity to O(logN)
 ```
