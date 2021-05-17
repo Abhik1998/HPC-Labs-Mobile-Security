@@ -68,8 +68,7 @@ class blockchain{
         for(String name: results)
         {
             ProcessBuilder fb=new ProcessBuilder();
-            System.gc();
-            long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            
 
             String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset/"+name+"> temp/"+id+".txt";
             fb.command("bash", "-c", tool);
@@ -113,6 +112,8 @@ class blockchain{
                 }
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
+                System.gc();
+                long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
                 add(name, appdata);
                // sc.close();
                 //System.out.println(id+" "+permissions);
