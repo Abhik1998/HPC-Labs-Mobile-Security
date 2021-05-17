@@ -44,3 +44,10 @@ where, N = number of apk files to be analyzed,
 ** JDK8+ has improved it, whenever there are 8+ elements in a bucket, rather than using a linkedList,   
    a tree is used reducing the worst case time complexity to O(logN)
 ```
+
+### Practical complexity:
+
+![Permission blockchain](images/line-graph.png)
+
+#### Scatter-plot version
+![Scatter-plot of Feature Extraction: Permission](images/scatter-plot.png)
