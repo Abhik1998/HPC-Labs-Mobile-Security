@@ -6,7 +6,7 @@ Id                     Memory                     Permission Size
 5                     120                     10
 6                     192                     10
 7                     120                     21
-8                     -62760                     16
+8                     120                     16
 9                     120                     17
 10                     120                     11
 11                     144                     16
@@ -167,5 +167,5 @@ Id                     Memory                     Permission Size
 167                     120                     13
 168                     120                     8
 169                     120                     6
-170                     176                     13
-Total time taken: 8872
+170                     120                     13
+Total time taken: 9037
