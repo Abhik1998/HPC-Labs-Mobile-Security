@@ -1,6 +1,7 @@
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.io.File;
@@ -8,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.security.NoSuchAlgorithmException;
 import java.lang.instrument.Instrumentation;
+import java.io.FileWriter;   // Import the FileWriter class
+import java.io.IOException;
+
 
 
 
@@ -64,7 +68,8 @@ class blockchain{
             }
         }
         int id=0;
-        System.out.println("Id"+"                     "+"Memory"+"                     "+"Permission Size");
+       // System.out.println("Id"+"                     "+"Memory"+"                     "+"Permission Size"+"      Time");
+       System.out.println("Writing to File.....");
         for(String name: results)
         {
             ProcessBuilder fb=new ProcessBuilder();
@@ -112,21 +117,24 @@ class blockchain{
                 }
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
-                System.gc();
-                long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
                 add(name, appdata);
-               // sc.close();
-                //System.out.println(id+" "+permissions);
-                System.gc();
-                long fin=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            //     System.gc();
+            //     long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            //     add(name, appdata);
+            //    // sc.close();
+            //     //System.out.println(id+" "+permissions);
+            //     long time = System.currentTimeMillis() - start;
+            //     System.gc();
+            //     long fin=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-                System.out.println(id+"                     "+(fin-init)+"                     "+permissions.size());
+            //     System.out.println(id+"                     "+(fin-init)+"                     "+permissions.size()+"         "+time);
             }
 
-            long time = System.currentTimeMillis() - start;
+            
             
         }
         long total= System.currentTimeMillis() - start;
+        db();
         System.out.println("Total time taken: "+total);
     }
     private static void add(String app, Static data) throws NoSuchAlgorithmException{
@@ -169,5 +177,20 @@ class blockchain{
         }
 
         return result;
+    }
+    public static void db()throws IOException{
+        try {
+            FileWriter myWriter = new FileWriter("db.txt");
+            for(Map.Entry<String, Block> x: cache.entrySet()){
+                myWriter.write(x.getKey()+" "+x.getValue().data.permission);
+                myWriter.write(System.lineSeparator());
+            }
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+          } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+          }
+        
     }
 }
