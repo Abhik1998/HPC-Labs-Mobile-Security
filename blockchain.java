@@ -55,7 +55,7 @@ class blockchain{
         long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
 
-        File[] files = new File("Dataset_Maldroid_2020/Banking").listFiles();
+        File[] files = new File("Dataset_Maldroid_2020/Riskware").listFiles();
         //If this pathname does not denote a directory, then listFiles() returns null. 
         for (File file : files) {
             if (file.isFile()) {
@@ -71,8 +71,8 @@ class blockchain{
             System.gc();
             long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/Desktop/MobiBlock/mobiblock-master/Dataset_Maldroid_2020/Banking/"+name+"> temp/"+id+".txt";
-            //String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset_Maldroid_2020/Banking/"+name+"> temp/"+id+".txt";
+            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/Desktop/MobiBlock/mobiblock-master/Dataset_Maldroid_2020/Riskware/"+name+"> temp/"+id+".txt";
+            //String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset_Maldroid_2020/Riskware/"+name+"> temp/"+id+".txt";
             //System.out.println(tool);
             fb.command("bash", "-c", tool);
             Process process = fb.start();
