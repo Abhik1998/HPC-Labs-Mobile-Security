@@ -58,7 +58,7 @@ class blockchain{
         cache = new HashMap<>();
         long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
-        fetch();
+        //fetch();
         File[] files = new File("Dataset").listFiles();
         //If this pathname does not denote a directory, then listFiles() returns null. 
         for (File file : files) {
@@ -68,14 +68,14 @@ class blockchain{
             }
         }
         int id=0;
-       // System.out.println("Id"+"                     "+"Memory"+"                     "+"Permission Size"+"      Time");
+       System.out.println("Id"+"                     "+"Memory"+"                     "+"Permission Size");
        System.out.println("Writing to File.....");
         for(String name: results)
         {
             ProcessBuilder fb=new ProcessBuilder();
             
 
-            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/malapp/"+name+"> temp/"+id+".txt";
+            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset/"+name+"> temp/"+id+".txt";
             fb.command("bash", "-c", tool);
             Process process = fb.start();
             int exitVal = process.waitFor();
@@ -118,22 +118,13 @@ class blockchain{
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
                 add(name, appdata);
-            //     System.gc();
-            //     long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-            //     add(name, appdata);
-            //    // sc.close();
-            //     //System.out.println(id+" "+permissions);
-            //     long time = System.currentTimeMillis() - start;
-            //     System.gc();
-            //     long fin=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-            //     System.out.println(id+"                     "+(fin-init)+"                     "+permissions.size()+"         "+time);
+                System.out.println(id+"                     "+sizeof(permissions)+"                     "+permissions.size());
             }
 
             
             
         }
-        System.out.println(blockChainList.get(0).data.permission);
+        //System.out.println(blockChainList.get(0).data.permission);
         long total= System.currentTimeMillis() - start;
         db();
         System.out.println("Total time taken: "+total);
@@ -217,5 +208,12 @@ class blockchain{
             add(str[0], appdata);
         }
         sc.close();
+    }
+    public static int sizeof(SortedSet<String> h){
+        int size=0;
+        for(String x: h){
+            size+=x.length()*2;
+        }
+        return size+12;
     }
 }
