@@ -1,6 +1,7 @@
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.io.File;
@@ -8,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.security.NoSuchAlgorithmException;
 import java.lang.instrument.Instrumentation;
+import java.io.FileWriter;   // Import the FileWriter class
+import java.io.IOException;
+
 
 
 
@@ -54,9 +58,8 @@ class blockchain{
         cache = new HashMap<>();
         long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
-
-        File[] files = new File("Dataset_Maldroid_2020/Riskware").listFiles();
-        //If this pathname does not denote a directory, then listFiles() returns null. 
+        //fetch();
+        File[] files = new File("Dataset_Maldroid_2020/Banking").listFiles();
         for (File file : files) {
             if (file.isFile()) {
                 results.add(file.getName());
@@ -64,16 +67,14 @@ class blockchain{
             }
         }
         int id=0;
-        System.out.println("Id"+"                     "+"Memory"+"                     "+"Permission Size");
+       System.out.println("Writing to File.....");
+       int blockSize = 0;
         for(String name: results)
         {
             ProcessBuilder fb=new ProcessBuilder();
-            System.gc();
-            long init=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            
 
-            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/Desktop/MobiBlock/mobiblock-master/Dataset_Maldroid_2020/Riskware/"+name+"> temp/"+id+".txt";
-            //String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset_Maldroid_2020/Riskware/"+name+"> temp/"+id+".txt";
-            //System.out.println(tool);
+            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/Desktop/MobiBlock/mobiblock-master/Dataset_Maldroid_2020/Banking/"+name+"> temp/"+id+".txt";
             fb.command("bash", "-c", tool);
             Process process = fb.start();
             int exitVal = process.waitFor();
@@ -90,7 +91,11 @@ class blockchain{
                         data = sc.nextLine().trim();
                     }
                     if(!sc.hasNextLine())
+                    {
+                        blockSize += 810;
+                        System.out.println(id+","+blockSize);
                         continue;
+                    }
                     data = sc.nextLine().trim();
                     String p="permission.";
                     int temp=p.length();
@@ -116,25 +121,25 @@ class blockchain{
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
                 add(name, appdata);
-               // sc.close();
-                //System.out.println(id+" "+permissions);
-                System.gc();
-                long fin=Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-
-                System.out.println(id+"                     "+(fin-init)+"                     "+permissions.size());
+                blockSize += sizeof(permissions);
+                System.out.println(id+","+blockSize);
             }
 
-            long time = System.currentTimeMillis() - start;
+            
             
         }
-        long total= System.currentTimeMillis() - start;
-        System.out.println("Total time taken: "+total);
+        db();
     }
     private static void add(String app, Static data) throws NoSuchAlgorithmException{
         if(cache.containsKey(app))
         {
-            System.out.println("Adding an application which is already present is not permitted");
-            return;
+            if(cache.get(app).data.permission.equals(data.permission))
+                System.out.println("The app is the same or is already present in device");
+            else{
+                System.out.println(app+" is not good as permissions differ");
+                System.out.println("Old permissions: "+cache.get(app).data.permission);
+                System.out.println("New Permissions: "+data.permission);
+            }
         }
         String previousblockhash = size>=1?blockChainList.get(size-1).getHash(): "#";
         Block node = new Block(data, previousblockhash);
@@ -170,5 +175,45 @@ class blockchain{
         }
 
         return result;
+    }
+    public static void db()throws IOException{
+        try {
+            FileWriter myWriter = new FileWriter("db.txt");
+            for(Map.Entry<String, Block> x: cache.entrySet()){
+                myWriter.write(x.getKey()+" ");
+                for(String st: x.getValue().data.permission){
+                    myWriter.write(st+" ");
+                }
+                myWriter.write(System.lineSeparator());
+            }
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+          } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+          }
+        
+    }
+    public static void fetch()throws Exception{
+        File file=new File("db.txt");
+        Scanner sc=new Scanner(file);
+        while(sc.hasNextLine()){
+            String data=sc.nextLine();
+            String str[]=data.trim().split(" ");
+            SortedSet<String> permissions=new TreeSet<>();
+            for(int i=1;i<str.length;i++)
+                permissions.add(str[i]);
+            Static appdata=new Static();
+            appdata.permission=Collections.unmodifiableSortedSet(permissions);
+            add(str[0], appdata);
+        }
+        sc.close();
+    }
+    public static int sizeof(SortedSet<String> h){
+        int size=0;
+        for(String x: h){
+            size+=x.length()*2;
+        }
+        return size+12;
     }
 }
