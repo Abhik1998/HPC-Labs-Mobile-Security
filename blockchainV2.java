@@ -58,7 +58,6 @@ class blockchain{
         cache = new HashMap<>();
         long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
-        //fetch();
         File[] files = new File("Dataset").listFiles();
         for (File file : files) {
             if (file.isFile()) {
@@ -121,12 +120,9 @@ class blockchain{
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
                 add(name, appdata);
-                blockSize += sizeof(permissions);
-                System.out.println(id+","+blockSize);
-            }
-
-            
-            
+                long time= System.currentTimeMillis() - start;
+                System.out.println(id+","+time);
+            }            
         }
         db();
     }
@@ -146,15 +142,6 @@ class blockchain{
         size++;
         blockChainList.add(node);
         cache.put(app, node);
-        // if(validate(blockChainList))
-        // {
-        //     blockChainList.add(node);
-        //     cache.put(app, node);
-        // }
-        // else
-        // {
-        //     System.out.println("Not valid operation");
-        // }
     }
     private static boolean validate(ArrayList<Block> blockChain) {
         boolean result = true;
