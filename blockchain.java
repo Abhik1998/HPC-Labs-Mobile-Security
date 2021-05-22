@@ -58,7 +58,7 @@ class blockchain{
         cache = new HashMap<>();
         long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
-
+        fetch();
         File[] files = new File("Dataset").listFiles();
         //If this pathname does not denote a directory, then listFiles() returns null. 
         for (File file : files) {
@@ -75,7 +75,7 @@ class blockchain{
             ProcessBuilder fb=new ProcessBuilder();
             
 
-            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset/"+name+"> temp/"+id+".txt";
+            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/malapp/"+name+"> temp/"+id+".txt";
             fb.command("bash", "-c", tool);
             Process process = fb.start();
             int exitVal = process.waitFor();
@@ -133,6 +133,7 @@ class blockchain{
             
             
         }
+        System.out.println(blockChainList.get(0).data.permission);
         long total= System.currentTimeMillis() - start;
         db();
         System.out.println("Total time taken: "+total);
@@ -140,8 +141,13 @@ class blockchain{
     private static void add(String app, Static data) throws NoSuchAlgorithmException{
         if(cache.containsKey(app))
         {
-            System.out.println("Adding an application which is already present is not permitted");
-            return;
+            if(cache.get(app).data.permission.equals(data.permission))
+                System.out.println("The app is the same or is already present in device");
+            else{
+                System.out.println(app+" is not good as permissions differ");
+                System.out.println("Old permissions: "+cache.get(app).data.permission);
+                System.out.println("New Permissions: "+data.permission);
+            }
         }
         String previousblockhash = size>=1?blockChainList.get(size-1).getHash(): "#";
         Block node = new Block(data, previousblockhash);
@@ -181,8 +187,12 @@ class blockchain{
     public static void db()throws IOException{
         try {
             FileWriter myWriter = new FileWriter("db.txt");
+            //myWriter.write("Here you go");
             for(Map.Entry<String, Block> x: cache.entrySet()){
-                myWriter.write(x.getKey()+" "+x.getValue().data.permission);
+                myWriter.write(x.getKey()+" ");
+                for(String st: x.getValue().data.permission){
+                    myWriter.write(st+" ");
+                }
                 myWriter.write(System.lineSeparator());
             }
             myWriter.close();
@@ -192,5 +202,20 @@ class blockchain{
             e.printStackTrace();
           }
         
+    }
+    public static void fetch()throws Exception{
+        File file=new File("db.txt");
+        Scanner sc=new Scanner(file);
+        while(sc.hasNextLine()){
+            String data=sc.nextLine();
+            String str[]=data.trim().split(" ");
+            SortedSet<String> permissions=new TreeSet<>();
+            for(int i=1;i<str.length;i++)
+                permissions.add(str[i]);
+            Static appdata=new Static();
+            appdata.permission=Collections.unmodifiableSortedSet(permissions);
+            add(str[0], appdata);
+        }
+        sc.close();
     }
 }
