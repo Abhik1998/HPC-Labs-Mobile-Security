@@ -56,7 +56,6 @@ class blockchainV2{
     public static void main(String[] args)throws Exception {
         blockChainList =  new ArrayList<>();
         cache = new HashMap<>();
-        long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
         File[] files = new File("Dataset").listFiles();
         for (File file : files) {
@@ -68,8 +67,10 @@ class blockchainV2{
         int id=0;
        System.out.println("Writing to File.....");
        int blockSize = 0;
+       long total=0;
         for(String name: results)
         {
+            long start = System.currentTimeMillis();
             ProcessBuilder fb=new ProcessBuilder();
             
 
@@ -121,7 +122,8 @@ class blockchainV2{
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
                 add(name, appdata);
                 long time= System.currentTimeMillis() - start;
-                System.out.println(id+","+time);
+                total +=time;
+                System.out.println(id+","+total);
             }            
         }
         db();
