@@ -74,7 +74,7 @@ class blockchain{
             ProcessBuilder fb=new ProcessBuilder();
             
 
-            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset/"+name+"> temp/"+id+".txt";
+            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/path/to/Dataset/"+name+"> temp/"+id+".txt";
             fb.command("bash", "-c", tool);
             Process process = fb.start();
             int exitVal = process.waitFor();
@@ -123,6 +123,7 @@ class blockchain{
                 add(name, appdata);
                 blockSize += sizeof(permissions);
                 System.out.println(id+","+blockSize);
+                sc.close();
             }
 
             
@@ -156,6 +157,12 @@ class blockchain{
         //     System.out.println("Not valid operation");
         // }
     }
+    public static boolean permissionSearch(String app, String feature){
+        if(cache.containsKey(app) && cache.get(app).data.permission.contains(feature))
+            return true;
+        return false;
+    }
+
     private static boolean validate(ArrayList<Block> blockChain) {
         boolean result = true;
 

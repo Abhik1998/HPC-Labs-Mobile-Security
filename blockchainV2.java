@@ -15,7 +15,7 @@ import java.io.IOException;
 
 
 
-class blockchain{
+class blockchainV2{
 
     //Declare the data structures to be used
     private static ArrayList<Block> blockChainList;
