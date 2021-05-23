@@ -65,8 +65,6 @@ class blockchainV2{
             }
         }
         int id=0;
-       System.out.println("Writing to File.....");
-       int blockSize = 0;
        long total=0;
         for(String name: results)
         {
@@ -92,8 +90,9 @@ class blockchainV2{
                     }
                     if(!sc.hasNextLine())
                     {
-                        blockSize += 810;
-                        System.out.println(id+","+blockSize);
+                        long time= System.currentTimeMillis() - start;
+                        total +=time;
+                        System.out.println(id+","+total);
                         continue;
                     }
                     data = sc.nextLine().trim();
@@ -176,7 +175,6 @@ class blockchainV2{
                 myWriter.write(System.lineSeparator());
             }
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
           } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
