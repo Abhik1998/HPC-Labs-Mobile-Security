@@ -67,14 +67,13 @@ class blockchain{
             }
         }
         int id=0;
-       System.out.println("Writing to File.....");
-       int blockSize = 0;
+        int block[]=new int[35];
         for(String name: results)
         {
             ProcessBuilder fb=new ProcessBuilder();
             
 
-            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/path/to/Dataset/"+name+"> temp/"+id+".txt";
+            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset/"+name+"> temp/"+id+".txt";
             fb.command("bash", "-c", tool);
             Process process = fb.start();
             int exitVal = process.waitFor();
@@ -92,8 +91,6 @@ class blockchain{
                     }
                     if(!sc.hasNextLine())
                     {
-                        blockSize += 810;
-                        System.out.println(id+","+blockSize);
                         continue;
                     }
                     data = sc.nextLine().trim();
@@ -121,14 +118,12 @@ class blockchain{
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
                 add(name, appdata);
-                blockSize += sizeof(permissions);
-                System.out.println(id+","+blockSize);
+                block[permissions.size()]+=1;
                 sc.close();
             }
-
-            
-            
         }
+        for(int i=0;i<35;i++)
+            System.out.println(i+","+block[i]);
         db();
     }
     private static void add(String app, Static data) throws NoSuchAlgorithmException{
@@ -194,7 +189,7 @@ class blockchain{
                 myWriter.write(System.lineSeparator());
             }
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
+            //System.out.println("Successfully wrote to the file.");
           } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
