@@ -58,8 +58,8 @@ class blockchain{
         cache = new HashMap<>();
         long start = System.currentTimeMillis();
         ArrayList<String> results = new ArrayList<>();
-        //fetch();
-        File[] files = new File("Dataset").listFiles();
+        fetch();
+        File[] files = new File("malapp").listFiles();
         for (File file : files) {
             if (file.isFile()) {
                 results.add(file.getName());
@@ -67,13 +67,12 @@ class blockchain{
             }
         }
         int id=0;
-        int block[]=new int[35];
         for(String name: results)
         {
             ProcessBuilder fb=new ProcessBuilder();
             
 
-            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/Dataset/"+name+"> temp/"+id+".txt";
+            String tool="$ANDROID_SDK/build-tools/30.0.3/aapt2 d xmltree --file AndroidManifest.xml $HOME/class/BTP/malapp/"+name+"> temp/"+id+".txt";
             fb.command("bash", "-c", tool);
             Process process = fb.start();
             int exitVal = process.waitFor();
@@ -118,12 +117,9 @@ class blockchain{
                 Static appdata=new Static();
                 appdata.permission=Collections.unmodifiableSortedSet(permissions);
                 add(name, appdata);
-                block[permissions.size()]+=1;
                 sc.close();
             }
         }
-        for(int i=0;i<35;i++)
-            System.out.println(i+","+block[i]);
         db();
     }
     private static void add(String app, Static data) throws NoSuchAlgorithmException{

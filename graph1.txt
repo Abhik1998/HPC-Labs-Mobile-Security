@@ -1,5 +1,4 @@
 Id                     Memory                     Permission Size
-Writing to File.....
 1                     668                     20
 2                     196                     6
 3                     290                     9
@@ -169,5 +168,3 @@ Writing to File.....
 168                     264                     8
 169                     188                     6
 170                     404                     13
-Successfully wrote to the file.
-Total time taken: 7597
